@@ -6,7 +6,10 @@ namespace MurderWithFriendsAPI.Models
 {
     public partial class ItsOnlyHeroesContext : DbContext
     {
-        public ItsOnlyHeroesContext()
+		// The following command will regenerate your models from the DB. Run it in the nuget console window.
+
+		//Scaffold-DbContext "Server=cryptographstudios.database.windows.net;Database=ItsOnlyHeroes;Trusted_Connection=False;User ID=Cryptographer; Password=1q2w3e!Q@W#E" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f
+		public ItsOnlyHeroesContext()
         {
         }
 
