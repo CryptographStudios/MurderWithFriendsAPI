@@ -10,6 +10,8 @@ namespace MurderWithFriendsAPI.Services
 	{
 		public bool IsAuthorized(string userName, string password)
 		{
+			if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password)) return false;
+
 			using (var context = new ItsOnlyHeroesContext())
 			{
 				int userCount = context.Security.Where(x => x.User.UserName == userName && x.SaltedHash == password).Count();

@@ -16,34 +16,21 @@ namespace MurderWithFriendsAPI.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly ItsOnlyHeroesContext _context;
-		private AuthService _authService;
-
+	
 		public UsersController(ItsOnlyHeroesContext context, AuthService authService)
 		{
-			_context = context;
-			_authService = authService;
+			_context = context;			
 		}
-
-		[HttpGet("{userName}/{password}")]
-		[ActionName("Login")]		
-		public bool Login(string userName, string password)
-
-		{
-			return _authService.IsAuthorized(userName, password);		
-		}
-
 
 		// GET: api/Users
-		[HttpGet]
-		[ActionName("GetUser")]
+		[HttpGet]	
 		public IEnumerable<User> GetUser()
         {
             return _context.User;
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-		[ActionName("GetUser")]
+        [HttpGet("{id}")]		
 		public async Task<IActionResult> GetUser([FromRoute] long id)
         {
             if (!ModelState.IsValid)
