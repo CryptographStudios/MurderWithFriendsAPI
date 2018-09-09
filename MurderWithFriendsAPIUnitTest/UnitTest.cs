@@ -28,6 +28,7 @@ namespace MurderWithFriendsAPIUnitTest
 			newUser.DisplayName = "MCubed";
 			newUser.LastLogin = DateTime.UtcNow;
 			newUser.UserName = "Matt";
+			
 
 			using (var context = new ItsOnlyHeroesContext())
 			{

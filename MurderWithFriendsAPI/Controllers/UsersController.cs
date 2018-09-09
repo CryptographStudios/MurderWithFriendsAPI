@@ -6,23 +6,36 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MurderWithFriendsAPI.Models;
+using MurderWithFriendsAPI.Services;
 
 namespace MurderWithFriendsAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
-    {
-        private readonly ItsOnlyHeroesContext _context;
 
-        public UsersController(ItsOnlyHeroesContext context)
-        {
-            _context = context;
-        }
+	[Route("api/[controller]/[action]")]
+	[ApiController]
+	public class UsersController : ControllerBase
+	{
+		private readonly ItsOnlyHeroesContext _context;
+		private AuthService _authService;
 
-        // GET: api/Users
-        [HttpGet]
-        public IEnumerable<User> GetUser()
+		public UsersController(ItsOnlyHeroesContext context, AuthService authService)
+		{
+			_context = context;
+			_authService = authService;
+		}
+
+		[HttpGet("{userName}/{password}")]
+		[ActionName("Login")]		
+		public bool Login(string userName, string password)
+
+		{
+			return _authService.IsAuthorized(userName, password);		
+		}
+
+
+		// GET: api/Users
+		[HttpGet]		
+		public IEnumerable<User> GetUser()
         {
             return _context.User;
         }
