@@ -6,6 +6,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <UserSecretsId>0d7cf89c-84f4-47ae-8bca-1e629c4ddf3f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

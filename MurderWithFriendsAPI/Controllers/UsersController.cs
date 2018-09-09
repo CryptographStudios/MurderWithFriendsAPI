@@ -34,7 +34,8 @@ namespace MurderWithFriendsAPI.Controllers
 
 
 		// GET: api/Users
-		[HttpGet]		
+		[HttpGet]
+		[ActionName("GetUser")]
 		public IEnumerable<User> GetUser()
         {
             return _context.User;
@@ -42,7 +43,8 @@ namespace MurderWithFriendsAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] long id)
+		[ActionName("GetUser")]
+		public async Task<IActionResult> GetUser([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
