@@ -10,7 +10,7 @@ namespace MurderWithFriendsAPI.Services
 {
 	public class DamageService
 	{
-		public decimal CalculateDamage(long attackerID, long defenderID)
+		public int CalculateDamage(long attackerID, long defenderID)
 		{			
 			int attackVal = GetAttackValue(attackerID);
 			int defenseVal = 1;
