@@ -17,73 +17,56 @@ namespace MurderWithFriendsAPI.Services
 			return attackVal - defenseVal;
 		}
 
-		private int GetAttackValue(long characterID)
+        //this works for a basic, physical attack only. We will have to make it more flexy
+        //making public, just for the moment.
+		public int GetAttackValue(long characterID)
 		{
-			int attackVal = 0;
 			using (var context = new ItsOnlyHeroesContext())
 			{
-				List<Character> achar = context.Character.Where(x => x.CharacterId == characterID)
-					.Include(x => x.BaseStats).ToList();								
+                Character character = context.Character.Where(x => x.CharacterId == characterID)
+                                                            .Include(x => x.BaseStats)
+                                                            .Include(x => x.Equipment)                                                            
+                                                            .FirstOrDefault();								
 				
-				foreach (var stat in achar.Where(x => x.BaseStats != null))
-				{
-					attackVal += 
-						stat.BaseStats.Agility +
-						stat.BaseStats.Armor +
-						stat.BaseStats.ArmorPenetration +
-						stat.BaseStats.Charisma +
-						stat.BaseStats.Constitution +
-						stat.BaseStats.DarkBonus +
-						stat.BaseStats.Dexterity +
-						stat.BaseStats.EarthBonus +
-						stat.BaseStats.ElectricBonus +
-						stat.BaseStats.FireBonus +
-						stat.BaseStats.HolyBonus +
-						stat.BaseStats.Intelligence +
-						stat.BaseStats.MagicPenetration +
-						stat.BaseStats.MagicResist +
-						stat.BaseStats.Strength +
-						stat.BaseStats.WaterBonus +
-						stat.BaseStats.Wisdom;						
-				}
-			}
+                var equipment = character.Equipment.ToList();
+                int attack = character.BaseStats.Strength;
 
-			return attackVal;
+                foreach (Equipment e in equipment)
+                {
+                    //this is stupid. let's not do it this way.
+                    Item item = context.Item.Where(x => x.ItemId == e.ItemId)
+                        .Include(x => x.Stats)
+                        .FirstOrDefault() ;
+
+                    attack += item.Stats.Strength;
+                }
+                return attack;
+			}	
 		}
+
 
 
 		private int GetDefenseValue(long characterID)
 		{
-			int defenseVal = 0;
-			using (var context = new ItsOnlyHeroesContext())
-			{
-				List<Character> achar = context.Character.Where(x => x.CharacterId == characterID)
-					.Include(x => x.BaseStats).ToList();
+            int defenseVal = 0;
+            using (var context = new ItsOnlyHeroesContext())
+            {
+                //This really needs to go in a DAL.
+                Character character = context.Character.Where(x => x.CharacterId == characterID)
+                                                            .Include(x => x.BaseStats)
+                                                            .Include(x => x.Equipment)
+                                                            .FirstOrDefault();
 
-				foreach (var stat in achar.Where(x => x.BaseStats != null))
-				{
-					defenseVal +=
-						stat.BaseStats.Agility +
-						stat.BaseStats.Armor +
-						stat.BaseStats.ArmorPenetration +
-						stat.BaseStats.Charisma +
-						stat.BaseStats.Constitution +
-						stat.BaseStats.DarkBonus +
-						stat.BaseStats.Dexterity +
-						stat.BaseStats.EarthBonus +
-						stat.BaseStats.ElectricBonus +
-						stat.BaseStats.FireBonus +
-						stat.BaseStats.HolyBonus +
-						stat.BaseStats.Intelligence +
-						stat.BaseStats.MagicPenetration +
-						stat.BaseStats.MagicResist +
-						stat.BaseStats.Strength +
-						stat.BaseStats.WaterBonus +
-						stat.BaseStats.Wisdom;
-				}
-			}
+                var equipment = character.Equipment.ToList();
+                int attack = character.BaseStats.Armor;
 
-			return defenseVal;
+                foreach (Equipment e in equipment)
+                {
+                    attack += e.Item.Stats.Armor;
+                }
+            }
+
+            return defenseVal;
 		}
 
 	}

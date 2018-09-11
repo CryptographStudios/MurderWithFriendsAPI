@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MurderWithFriendsAPI.Models;
+using MurderWithFriendsAPI.Services;
 using System;
 
 namespace MurderWithFriendsAPIUnitTest
@@ -38,5 +39,12 @@ namespace MurderWithFriendsAPIUnitTest
 				Assert.IsTrue(heroUser.Entity.UserId > 0);
 			}
 		}
+        [TestMethod]
+        public void  CanGetAttackValue()
+        {
+            var dmgService = new DamageService();
+            int testVal = dmgService.GetAttackValue(8);
+            Assert.IsTrue(testVal > 0);
+        }
 	}
 }
