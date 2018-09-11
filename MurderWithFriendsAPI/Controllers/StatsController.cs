@@ -39,7 +39,7 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stats = await _context.Stats.FindAsync(id);
+            var stats = await _context.Stats.FindAsync(id); 
 
             if (stats == null)
             {
