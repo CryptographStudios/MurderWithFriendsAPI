@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace MurderWithFriendsAPI.Models
+namespace MurderWithFriendsAPI.DAL.Models
 {
     public partial class ItsOnlyHeroesContext : DbContext
     {
@@ -38,7 +38,7 @@ namespace MurderWithFriendsAPI.Models
 			if (!optionsBuilder.IsConfigured)
 			{
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-				//optionsBuilder.UseSqlServer("Server=cryptographstudios.database.windows.net;Database=ItsOnlyHeroes;Trusted_Connection=False;  Persist Security Info=False;User ID=Cryptographer;Password=1q2w3e!Q@W#E;");
+				optionsBuilder.UseSqlServer("Server=cryptographstudios.database.windows.net;Database=ItsOnlyHeroes;Trusted_Connection=False;  Persist Security Info=False;User ID=Cryptographer;Password=1q2w3e!Q@W#E;");
 			}
 		}
 

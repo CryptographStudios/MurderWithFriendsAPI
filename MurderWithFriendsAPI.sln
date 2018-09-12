@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MurderWithFriendsAPI", "Mur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MurderWithFriendsAPIUnitTest", "MurderWithFriendsAPIUnitTest\MurderWithFriendsAPIUnitTest.csproj", "{02414C2F-14CB-4E53-A4F2-795A2BC90B65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MurderWithFriendsAPI.DAL", "MurderWithFriendsAPI.DAL\MurderWithFriendsAPI.DAL.csproj", "{06F55816-2904-4BAC-B3C9-F56757C72C4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MurderWithFriendsAPI.DAL.Tests", "MurderWithFriendsAPI.DAL.Tests\MurderWithFriendsAPI.DAL.Tests.csproj", "{D68C47C2-F5AB-496A-B4A6-DB95083D95E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{02414C2F-14CB-4E53-A4F2-795A2BC90B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02414C2F-14CB-4E53-A4F2-795A2BC90B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02414C2F-14CB-4E53-A4F2-795A2BC90B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06F55816-2904-4BAC-B3C9-F56757C72C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06F55816-2904-4BAC-B3C9-F56757C72C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06F55816-2904-4BAC-B3C9-F56757C72C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06F55816-2904-4BAC-B3C9-F56757C72C4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68C47C2-F5AB-496A-B4A6-DB95083D95E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68C47C2-F5AB-496A-B4A6-DB95083D95E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68C47C2-F5AB-496A-B4A6-DB95083D95E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68C47C2-F5AB-496A-B4A6-DB95083D95E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
