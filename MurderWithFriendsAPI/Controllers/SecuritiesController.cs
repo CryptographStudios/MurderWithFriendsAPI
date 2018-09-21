@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MurderWithFriendsAPI.Models;
+using MurderWithFriendsAPI.DAL.Models;
+using MurderWithFriendsAPI.DAL.DataAccess;
+using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
 
 namespace MurderWithFriendsAPI.Controllers
 {
@@ -13,19 +15,20 @@ namespace MurderWithFriendsAPI.Controllers
     [ApiController]
     public class SecuritiesController : ControllerBase
     {
-        private readonly ItsOnlyHeroesContext _context;
+        private readonly ISecurityData _securityData;
 
-        public SecuritiesController(ItsOnlyHeroesContext context)
+        public SecuritiesController(ISecurityData securityData)
         {
-            _context = context;
+            _securityData = securityData;
         }
 
+        //WTF is this for?
         // GET: api/Securities
-        [HttpGet]
-        public IEnumerable<Security> GetSecurity()
-        {
-            return _context.Security;
-        }
+        //[HttpGet]
+        //public IEnumerable<Security> GetSecurity()
+        //{
+        //    return _securityData.Security;
+        //}
 
         // GET: api/Securities/5
         [HttpGet("{id}")]
@@ -36,7 +39,7 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var security = await _context.Security.FindAsync(id);
+            var security = await _securityData.GetSecurity(id);
 
             if (security == null)
             {
@@ -60,11 +63,9 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(security).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _securityData.AddSecurity(security);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -90,9 +91,8 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Security.Add(security);
-            await _context.SaveChangesAsync();
-
+            await _securityData.AddSecurity(security);
+            
             return CreatedAtAction("GetSecurity", new { id = security.SecurityId }, security);
         }
 
@@ -105,21 +105,26 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var security = await _context.Security.FindAsync(id);
+            var security = await _securityData.GetSecurity(id);
             if (security == null)
             {
                 return NotFound();
             }
 
-            _context.Security.Remove(security);
-            await _context.SaveChangesAsync();
+            await _securityData.DeleteSecurity(id);
 
             return Ok(security);
         }
 
         private bool SecurityExists(long id)
         {
-            return _context.Security.Any(e => e.SecurityId == id);
+            var sec =  _securityData.GetSecurity(id);
+            bool exists = false;
+
+            if (sec != null)
+                exists = true;
+
+            return exists;
         }
     }
 }

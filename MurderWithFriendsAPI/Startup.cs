@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MurderWithFriendsAPI.Models;
 using MurderWithFriendsAPI.Services;
 
 namespace MurderWithFriendsAPI
@@ -29,7 +28,6 @@ namespace MurderWithFriendsAPI
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-			services.AddDbContext<ItsOnlyHeroesContext>(options => options.UseSqlServer("Server=cryptographstudios.database.windows.net;Database=ItsOnlyHeroes;Trusted_Connection=False;  Persist Security Info=False;User ID=Cryptographer;Password=1q2w3e!Q@W#E;"));
 			services.AddTransient<DamageService>();
 			services.AddTransient<AuthService>();
 		}

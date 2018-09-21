@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MurderWithFriendsAPI.Models;
+using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+using MurderWithFriendsAPI.DAL.Models;
 using MurderWithFriendsAPI.Services;
 
 namespace MurderWithFriendsAPI.Controllers
@@ -15,19 +16,20 @@ namespace MurderWithFriendsAPI.Controllers
 	[ApiController]
 	public class UsersController : ControllerBase
 	{
-		private readonly ItsOnlyHeroesContext _context;
+		private readonly IUserData _userData;
 	
-		public UsersController(ItsOnlyHeroesContext context, AuthService authService)
+		public UsersController(IUserData userData, AuthService authService)
 		{
-			_context = context;			
+			_userData = userData;			
 		}
 
+        //I Still think this is a bad idea.
 		// GET: api/Users
-		[HttpGet]	
-		public IEnumerable<User> GetUser()
-        {
-            return _context.User;
-        }
+		//[HttpGet]	
+		//public IEnumerable<User> GetUser()
+  //      {
+  //          return _context.User;
+  //      }
 
         // GET: api/Users/5
         [HttpGet("{id}")]		
@@ -38,7 +40,7 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _userData.GetUser(id);
 
             if (user == null)
             {
@@ -62,23 +64,7 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _userData.AddOrUpdateUser(user);
 
             return NoContent();
         }
@@ -92,9 +78,7 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
-
+            await _userData.AddOrUpdateUser(user);
             return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
 
@@ -107,21 +91,20 @@ namespace MurderWithFriendsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _userData.GetUser(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
+            await _userData.DeleteUser(id);
+            
             return Ok(user);
         }
 
-        private bool UserExists(long id)
+        private async Task<bool> UserExists(long id)
         {
-            return _context.User.Any(e => e.UserId == id);
+            return await UserExists(id);
         }
     }
 }

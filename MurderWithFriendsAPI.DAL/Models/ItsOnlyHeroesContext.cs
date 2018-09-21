@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MurderWithFriendsAPI.DAL.Models
 {
-    public partial class ItsOnlyHeroesContext : DbContext
+    internal class ItsOnlyHeroesContext : DbContext
     {
 		// The following command will regenerate your models from the DB. Run it in the nuget console window.
 

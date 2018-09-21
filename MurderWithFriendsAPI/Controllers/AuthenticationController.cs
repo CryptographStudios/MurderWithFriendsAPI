@@ -22,10 +22,10 @@ namespace MurderWithFriendsAPI.Controllers
 		}
 
 		[HttpGet("{userName}/{password}")]		
-		public bool GetAuthentication(string userName, string password)
+		public async Task<bool> GetAuthentication(string userName, string password)
 
 		{
-			return _authService.IsAuthorized(userName, password);
+			return await _authService.IsAuthorized(userName, password);
 		}
 	}
 }

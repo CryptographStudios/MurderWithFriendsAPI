@@ -1,4 +1,4 @@
-﻿using MurderWithFriendsAPI.Models;
+﻿using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +8,15 @@ namespace MurderWithFriendsAPI.Services
 {
 	public class AuthService
 	{
-		public bool IsAuthorized(string userName, string password)
-		{
-			if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password)) return false;
+        ISecurityData _securityData;
+        public AuthService(ISecurityData security)
+        {
+            _securityData = security;
+        }
 
-			using (var context = new ItsOnlyHeroesContext())
-			{
-				int userCount = context.Security.Where(x => x.User.UserName == userName && x.SaltedHash == password).Count();
-				return (userCount == 1);
-			}			
+		public async Task<bool> IsAuthorized(string userName, string password)
+		{
+            return await _securityData.AttemptLogin(userName, password);		
 		}
 	}
 }

@@ -13,43 +13,43 @@ namespace MurderWithFriendsAPI.DAL.Tests
 
         public CharacterDataTests()
         {
-            _data = new CharacterData(new ItsOnlyHeroesContext());
+            _data = new CharacterData();
         }
 
         [TestMethod]
-        public void TestGetCharacter()
+        public async void TestGetCharacter()
         {
 
             List<long> charIds = new List<long> { 8 };
 
-            var characters = _data.GetCharactersBasicInfo(charIds).ToList();
+            var characters = (await _data.GetCharactersBasicInfo(charIds)).ToList();
 
             Assert.IsTrue(characters.Count > 0);
         }
 
         [TestMethod]
-        public void TestAddCharacter()
+        public async void TestAddCharacter()
         {
             var character = BuildTestCharacter();
             List<Character> characters = new List<Character> { character };
 
-            _data.AddOrUpdateCharacters(characters);
+            await _data.AddOrUpdateCharacters(characters);
 
             Assert.IsTrue(character.CharacterId > 0);
         }
 
         [TestMethod]
-        public void TestUpdateCharacter()
+        public async void TestUpdateCharacter()
         {
             List<long> charIds = new List<long> { 8 };
-            var character = _data.GetCharactersBasicInfo(charIds).FirstOrDefault();
+            var character = (await _data.GetCharactersBasicInfo(charIds)).FirstOrDefault();
             Assert.IsNotNull(character);
 
             var expectedName = character.Name + 'y';
             character.Name = expectedName;
             
             List<Character> characters = new List<Character> { character };
-            _data.AddOrUpdateCharacters(characters);
+            await _data.AddOrUpdateCharacters(characters);
 
             var updatedCharacter = _data.GetCharactersBasicInfo(charIds);
 

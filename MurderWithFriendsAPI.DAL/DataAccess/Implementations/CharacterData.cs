@@ -4,57 +4,61 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MurderWithFriendsAPI.DAL.DataAccess.Implementations
 {
     //these should all be async later. I'm being lazy.
-    public class CharacterData
+    public class CharacterData : ICharacterData
     {
         private readonly ItsOnlyHeroesContext _dbContext;
 
-        public CharacterData(ItsOnlyHeroesContext context)
+        public CharacterData()
         {
-            _dbContext = context;
+            _dbContext = new ItsOnlyHeroesContext();
         }
 
-        public IEnumerable<Character> GetCharactersBasicInfo(List<long> characterIds)
+        public async Task<IEnumerable<Character>> GetCharactersBasicInfo(List<long> characterIds)
         {
-            var characters = _dbContext.Character
-                                        .Where(c => characterIds.Contains(c.CharacterId)).ToList();
+            var characters = await _dbContext.Character
+                                        .Where(c => characterIds.Contains(c.CharacterId))
+                                        .ToListAsync();
 
             return characters;
         }
 
-        public IEnumerable<Character> GetCharactersDetailedInfo(List<long> characterIds)
+        public async Task<IEnumerable<Character>> GetCharactersDetailedInfo(List<long> characterIds)
         {
-            var characters = _dbContext.Character
+            var characters = await _dbContext.Character
                                         .Where(c => characterIds.Contains(c.CharacterId))
                                         .Include( c => c.Experience)
                                         .Include( c=> c.Equipment.Select( e => e.Item))
-                                        .ToList();
+                                        .ToListAsync();
 
             return characters;
         }
 
-        public void AddOrUpdateCharacters(IEnumerable<Character> characters)
+        public async Task AddOrUpdateCharacters(IEnumerable<Character> characters)
         {
             var newCharacters = characters.Where(c => c.CharacterId == 0).ToList();
             var updatedCharacters = characters.Where(c => c.CharacterId == 0).ToList();
 
-            AddCharacters(newCharacters);
+            await AddCharacters(newCharacters);
             
         }
 
-        private void AddCharacters(IEnumerable<Character> characters)
+        private async Task AddCharacters(IEnumerable<Character> characters)
         {
             _dbContext.Character.AddRange(characters);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        private void UpdateCharacters(IEnumerable<Character> characters)
+        private async Task UpdateCharacters(IEnumerable<Character> characters)
         {
             var characterIds = characters.Select(c => c.CharacterId).ToList();
-            var charactersToUpdate = GetCharactersDetailedInfo(characterIds);
+            var charactersToUpdate = await GetCharactersDetailedInfo(characterIds);
 
             foreach (Character c in charactersToUpdate)
             {

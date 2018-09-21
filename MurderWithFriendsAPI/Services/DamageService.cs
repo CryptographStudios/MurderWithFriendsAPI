@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MurderWithFriendsAPI.Models;
+using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+using MurderWithFriendsAPI.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,64 +11,53 @@ namespace MurderWithFriendsAPI.Services
 {
 	public class DamageService
 	{
-		public int CalculateDamage(long attackerID, long defenderID)
-		{			
-			int attackVal = GetAttackValue(attackerID);
-			int defenseVal = 1;
+        ICharacterData _characterData;
+        public DamageService(ICharacterData characterData)
+        {
+            _characterData = characterData;
+        }
+
+        //this is probably actually a MED pattern candidate.
+		public async Task<int> CalculateDamage(long attackerID, long defenderID)
+		{
+            var characterIds = new List<long> { attackerID, defenderID };
+            var characters = await _characterData.GetCharactersDetailedInfo(characterIds);
+
+            int attackVal = GetAttackValue(characters.Where(c => c.CharacterId == attackerID).First());
+            int defenseVal = GetDefenseValue(characters.Where(c => c.CharacterId == defenderID).First());
 			return attackVal - defenseVal;
 		}
 
         //this works for a basic, physical attack only. We will have to make it more flexy
         //making public, just for the moment.
-		public int GetAttackValue(long characterID)
+		public int GetAttackValue(Character attacker)
 		{
-			using (var context = new ItsOnlyHeroesContext())
-			{
-                Character character = context.Character.Where(x => x.CharacterId == characterID)
-                                                            .Include(x => x.BaseStats)
-                                                            .Include(x => x.Equipment)                                                            
-                                                            .FirstOrDefault();								
-				
-                var equipment = character.Equipment.ToList();
-                int attack = character.BaseStats.Strength;
 
-                foreach (Equipment e in equipment)
-                {
-                    //this is stupid. let's not do it this way.
-                    Item item = context.Item.Where(x => x.ItemId == e.ItemId)
-                        .Include(x => x.Stats)
-                        .FirstOrDefault() ;
+            var equipment = attacker.Equipment.ToList();
+            int attack = attacker.BaseStats.Strength;
 
-                    attack += item.Stats.Strength;
-                }
-                return attack;
-			}	
-		}
-
-
-
-		private int GetDefenseValue(long characterID)
-		{
-            int defenseVal = 0;
-            using (var context = new ItsOnlyHeroesContext())
+            foreach (Equipment e in equipment)
             {
-                //This really needs to go in a DAL.
-                Character character = context.Character.Where(x => x.CharacterId == characterID)
-                                                            .Include(x => x.BaseStats)
-                                                            .Include(x => x.Equipment)
-                                                            .FirstOrDefault();
-
-                var equipment = character.Equipment.ToList();
-                int attack = character.BaseStats.Armor;
-
-                foreach (Equipment e in equipment)
-                {
-                    attack += e.Item.Stats.Armor;
-                }
+                attack += e.Item.Stats.Strength;
             }
+            return attack;
 
-            return defenseVal;
-		}
+        }
+
+
+
+        private int GetDefenseValue(Character defender)
+        {
+
+            var equipment = defender.Equipment.ToList();
+            int defense = defender.BaseStats.Strength;
+
+            foreach (Equipment e in equipment)
+            {
+                defense += e.Item.Stats.Strength;
+            }
+            return defense;
+        }
 
 	}
 }

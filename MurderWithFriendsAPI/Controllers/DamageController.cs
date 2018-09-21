@@ -29,9 +29,9 @@ namespace MurderWithFriendsAPI.Controllers
 
         // GET: api/Damage/5
         [HttpGet("{attackerid}/{defenderid}", Name = "Get")]
-        public int Get(long attackerId, long defenderId)
+        public async Task<int> Get(long attackerId, long defenderId)
         {
-			return _damageService.CalculateDamage(attackerId, defenderId);
+			return await _damageService.CalculateDamage(attackerId, defenderId);
         }
 
         // POST: api/Damage
