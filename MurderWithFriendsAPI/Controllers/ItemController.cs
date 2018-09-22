@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
 using MurderWithFriendsAPI.DAL.DataAccess.Implementations;
 using MurderWithFriendsAPI.DAL.Models;
+using MurderWithFriendsAPI.Data.DTO;
 
 namespace MurderWithFriendsAPI.Controllers
 {
@@ -22,11 +23,11 @@ namespace MurderWithFriendsAPI.Controllers
         }
         // GET: api/Item
         [HttpGet]
-        public async Task<IEnumerable<Item>> Get()
+        public async Task<IEnumerable<ItemDTO>> Get()
         {
             var items = await _itemData.GetAllItemsAsync();
-
-            return items;
+            var itemsDTO = AutoMapper.Mapper.Map<List<ItemDTO>>(items);
+            return itemsDTO;
         }
 
         // GET: api/Item/5
