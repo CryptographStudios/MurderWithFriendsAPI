@@ -34,9 +34,9 @@ namespace MurderWithFriendsAPI.Controllers
         [HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult> Get(long id)
         {
-            var items = await _itemData.GetItemAsync(id);
-
-            return Ok(items);
+            var item = await _itemData.GetItemAsync(id);
+            var itemDTO = AutoMapper.Mapper.Map<ItemDTO>(item);
+            return Ok(itemDTO);
         }
 
         // POST: api/Item
