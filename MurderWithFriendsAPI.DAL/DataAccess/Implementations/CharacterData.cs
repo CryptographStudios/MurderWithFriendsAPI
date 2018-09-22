@@ -13,31 +13,34 @@ namespace MurderWithFriendsAPI.DAL.DataAccess.Implementations
     //these should all be async later. I'm being lazy.
     public class CharacterData : ICharacterData
     {
-        private readonly ItsOnlyHeroesContext _dbContext;
-
         public CharacterData()
         {
-            _dbContext = new ItsOnlyHeroesContext();
         }
 
         public async Task<IEnumerable<Character>> GetCharactersBasicInfo(List<long> characterIds)
         {
-            var characters = await _dbContext.Character
-                                        .Where(c => characterIds.Contains(c.CharacterId))
-                                        .ToListAsync();
+            using (var dbContext = new ItsOnlyHeroesContext())
+            {
+                var characters = await dbContext.Character
+                                            .Where(c => characterIds.Contains(c.CharacterId))
+                                            .ToListAsync();
 
-            return characters;
+                return characters;
+            }
         }
 
         public async Task<IEnumerable<Character>> GetCharactersDetailedInfo(List<long> characterIds)
         {
-            var characters = await _dbContext.Character
+            using (var dbContext = new ItsOnlyHeroesContext())
+            {
+                var characters = await dbContext.Character
                                         .Where(c => characterIds.Contains(c.CharacterId))
-                                        .Include( c => c.Experience)
-                                        .Include( c=> c.Equipment.Select( e => e.Item))
+                                        .Include(c => c.Experience)
+                                        .Include(c => c.Equipment.Select(e => e.Item))
                                         .ToListAsync();
 
-            return characters;
+                return characters;
+            }
         }
 
         public async Task AddOrUpdateCharacters(IEnumerable<Character> characters)
@@ -51,8 +54,11 @@ namespace MurderWithFriendsAPI.DAL.DataAccess.Implementations
 
         private async Task AddCharacters(IEnumerable<Character> characters)
         {
-            _dbContext.Character.AddRange(characters);
-            await _dbContext.SaveChangesAsync();
+            using (var dbContext = new ItsOnlyHeroesContext())
+            {
+                dbContext.Character.AddRange(characters);
+                await dbContext.SaveChangesAsync();
+            }
         }
 
         private async Task UpdateCharacters(IEnumerable<Character> characters)
