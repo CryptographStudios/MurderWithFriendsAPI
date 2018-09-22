@@ -16,17 +16,17 @@ namespace MurderWithFriendsAPI.Controllers
     {
         IItemData _itemData;
 
-        ItemController()
+        public ItemController()
         {
             _itemData = new ItemData();
         }
         // GET: api/Item
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<IEnumerable<Item>> Get()
         {
             var items = await _itemData.GetAllItemsAsync();
 
-            return Ok(items);
+            return items;
         }
 
         // GET: api/Item/5
