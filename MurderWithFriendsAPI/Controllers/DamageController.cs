@@ -27,12 +27,12 @@ namespace MurderWithFriendsAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Damage/5
-        [HttpGet("{attackerid}/{defenderid}", Name = "Get")]
-        public async Task<int> Get(long attackerId, long defenderId)
-        {
-			return await _damageService.CalculateDamage(attackerId, defenderId);
-        }
+   //     // GET: api/Damage/5
+   //     [HttpGet("{attackerid}/{defenderid}", Name = "Get")]
+   //     public async Task<int> Get(long attackerId, long defenderId)
+   //     {
+			//return await _damageService.CalculateDamage(attackerId, defenderId);
+   //     }
 
         // POST: api/Damage
         [HttpPost]

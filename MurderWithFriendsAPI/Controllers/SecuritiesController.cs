@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MurderWithFriendsAPI.DAL.Models;
 using MurderWithFriendsAPI.DAL.DataAccess;
 using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+using MurderWithFriendsAPI.DAL.DataAccess.Implementations;
 
 namespace MurderWithFriendsAPI.Controllers
 {
@@ -17,9 +18,9 @@ namespace MurderWithFriendsAPI.Controllers
     {
         private readonly ISecurityData _securityData;
 
-        public SecuritiesController(ISecurityData securityData)
+        public SecuritiesController()
         {
-            _securityData = securityData;
+            _securityData = new SecurityData();
         }
 
         //WTF is this for?

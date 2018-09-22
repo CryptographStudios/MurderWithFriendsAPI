@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+using MurderWithFriendsAPI.DAL.DataAccess.Implementations;
 using MurderWithFriendsAPI.DAL.Models;
 
 namespace MurderWithFriendsAPI.Controllers
@@ -15,9 +16,9 @@ namespace MurderWithFriendsAPI.Controllers
     {
         IItemData _itemData;
 
-        ItemController(IItemData itemData)
+        ItemController()
         {
-            _itemData = itemData;
+            _itemData = new ItemData();
         }
         // GET: api/Item
         [HttpGet]

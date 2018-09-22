@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace MurderWithFriendsAPI.DAL.DataAccess.Implementations
 {
-    class SecurityData : ISecurityData
+    public class SecurityData : ISecurityData
     {
         private readonly ItsOnlyHeroesContext _dBContext;
 
-        public SecurityData(ItsOnlyHeroesContext context)
+        public SecurityData()
         {
-            _dBContext = context;
+            _dBContext = new ItsOnlyHeroesContext();
         }
 
         //public Task<IEnumerable<Security>> GetSecurity()

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MurderWithFriendsAPI.DAL.DataAccess.Implementations
 {
-    class ItemData : IItemData
+    public class ItemData : IItemData
     {
         public Task AddOrUpdateItemAsync(Item item)
         {

@@ -1,4 +1,5 @@
-﻿using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
+﻿using MurderWithFriendsAPI.DAL.DataAccess.Implementations;
+using MurderWithFriendsAPI.DAL.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace MurderWithFriendsAPI.Services
 	public class AuthService
 	{
         ISecurityData _securityData;
-        public AuthService(ISecurityData security)
+        public AuthService()
         {
-            _securityData = security;
+            _securityData = new SecurityData();
         }
 
 		public async Task<bool> IsAuthorized(string userName, string password)
